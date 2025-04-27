@@ -1,0 +1,1 @@
+# csharp_class_on_stack
