@@ -4,16 +4,16 @@ using System.Runtime.CompilerServices;
 
 namespace CsharpClassOnStack.Safe.Override;
 
-internal static class Unsafe
+internal static class Unsafe<T>
 {
-    private delegate ref IntPtr UnsafeRefCastDelegate(ref Span<IntPtr> from);
+    private delegate ref T UnsafeRefCastDelegate(ref Span<IntPtr> from);
 
     private static readonly UnsafeRefCastDelegate _delegate;
 
     static Unsafe()
     {
         var tFrom = typeof(Span<IntPtr>);
-        var tTo = typeof(IntPtr);
+        var tTo = typeof(T);
 
         var method = new DynamicMethod(
             name: "UnsafeRefAs",
@@ -31,5 +31,5 @@ internal static class Unsafe
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ref IntPtr As(ref Span<IntPtr> source) => ref _delegate(ref source);
+    public static ref T As(ref Span<IntPtr> source) => ref _delegate(ref source);
 }

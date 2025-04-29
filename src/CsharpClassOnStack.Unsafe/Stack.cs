@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace CsharpClassOnStack.Unsafe;
 
-public static class Stack<T>
+public static class Stack<T> where T : class
 {
     public static readonly int Size = IntPtr.Size * 2 + System.Runtime.CompilerServices.Unsafe.SizeOf<T>();
 
@@ -15,10 +15,10 @@ public static class Stack<T>
     {
         var pointer = (IntPtr*)stackBuffer;
 
-        *(pointer + 0) = IntPtr.Zero;
-        *(pointer + 1) = _typeHandle;
+        var mtPtr = pointer + 1;
+        *mtPtr = _typeHandle;
 
-        var ptr = (IntPtr)(pointer + 1);
+        var ptr = (IntPtr)mtPtr;
 
         return System.Runtime.CompilerServices.Unsafe.As<IntPtr, T>(ref ptr);
     }
@@ -28,11 +28,11 @@ public static class Stack<T>
     {
         var pointer = (IntPtr*)stackBuffer;
 
-        *(pointer + 0) = IntPtr.Zero;
-        *(pointer + 1) = _arrayTypeHandle;
+        var mtPtr = pointer + 1;
+        *mtPtr = _arrayTypeHandle;
         *(pointer + 2) = length;
 
-        var ptr = (IntPtr)(pointer + 1);
+        var ptr = (IntPtr)mtPtr;
 
         return System.Runtime.CompilerServices.Unsafe.As<IntPtr, T[]>(ref ptr);
     }

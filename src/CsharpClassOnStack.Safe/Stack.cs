@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace CsharpClassOnStack.Safe;
 
-public static class Stack<T>
+public static class Stack<T> where T : class
 {
     public static readonly int Size = IntPtr.Size * 2 + Unsafe.SizeOf<T>();
 
@@ -16,18 +16,15 @@ public static class Stack<T>
     {
         var buffer = MemoryMarshal.Cast<byte, IntPtr>(stackBuffer);
 
-        buffer[0] = IntPtr.Zero;
         buffer[1] = _typeHandle;
 
         var objBuffer = buffer[1..];
 
 #if NET9_0_OR_GREATER
-        var ptr = Unsafe.As<Span<IntPtr>, IntPtr>(ref objBuffer);
+        return Unsafe.As<Span<IntPtr>, T>(ref objBuffer);
 #else
-        var ptr = Override.Unsafe.As(ref objBuffer);
+        return Override.Unsafe<T>.As(ref objBuffer);
 #endif
-
-        return Unsafe.As<IntPtr, T>(ref ptr);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -35,18 +32,15 @@ public static class Stack<T>
     {
         var buffer = MemoryMarshal.Cast<byte, IntPtr>(stackBuffer);
 
-        buffer[0] = IntPtr.Zero;
         buffer[1] = _arrayTypeHandle;
         buffer[2] = length;
 
         var objBuffer = buffer[1..];
 
 #if NET9_0_OR_GREATER
-        var ptr = Unsafe.As<Span<IntPtr>, IntPtr>(ref objBuffer);
+        return Unsafe.As<Span<IntPtr>, T[]>(ref objBuffer);
 #else
-        var ptr = Override.Unsafe.As(ref objBuffer);
+        return Override.Unsafe<T[]>.As(ref objBuffer);
 #endif
-
-        return Unsafe.As<IntPtr, T[]>(ref ptr);
     }
 }
