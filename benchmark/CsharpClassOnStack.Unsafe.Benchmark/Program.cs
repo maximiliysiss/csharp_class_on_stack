@@ -41,6 +41,15 @@ namespace CsharpClassOnStack.Unsafe.Benchmark
         }
 
         [Benchmark]
+        public void SingleAllocateStackOnSpan()
+        {
+            var obj = Stack<ExampleClass>.Unsafe(stackalloc byte[Stack<ExampleClass>.Size]);
+
+            obj.X = 1;
+            obj.Y = 2;
+        }
+
+        [Benchmark]
         public void ManyAllocateHeap()
         {
             for (var i = 0; i < _n; i++)
@@ -61,6 +70,18 @@ namespace CsharpClassOnStack.Unsafe.Benchmark
             {
                 byte* buffer = stackalloc byte[Stack<ExampleClass>.Size];
                 var obj = Stack<ExampleClass>.Unsafe(buffer);
+
+                obj.X = 1;
+                obj.Y = 2;
+            }
+        }
+
+        [Benchmark]
+        public void ManyAllocateStackOnSpan()
+        {
+            for (var i = 0; i < _n; i++)
+            {
+                var obj = Stack<ExampleClass>.Unsafe(stackalloc byte[Stack<ExampleClass>.Size]);
 
                 obj.X = 1;
                 obj.Y = 2;

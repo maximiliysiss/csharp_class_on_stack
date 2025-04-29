@@ -36,4 +36,10 @@ public static class Stack<T>
 
         return System.Runtime.CompilerServices.Unsafe.As<IntPtr, T[]>(ref ptr);
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static unsafe T Unsafe(Span<byte> buffer) => Unsafe(*(byte**)&buffer);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static unsafe T[] Unsafe(Span<byte> buffer, int length) => Unsafe(*(byte**)&buffer, length);
 }

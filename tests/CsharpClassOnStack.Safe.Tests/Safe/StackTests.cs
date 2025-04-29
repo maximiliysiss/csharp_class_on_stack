@@ -9,7 +9,7 @@ namespace CsharpClassOnStack.Safe.Tests.Safe;
 public class StackTests
 {
     [Theory, AutoData]
-    public void Unsafe_ShouldAllocate_WhenItIsSimpleClass(ExampleClass expected)
+    public void Safe_ShouldAllocate_WhenItIsSimpleClass(ExampleClass expected)
     {
         // Arrange
 
@@ -25,7 +25,7 @@ public class StackTests
     }
 
     [Theory, AutoData]
-    public void Unsafe_ShouldAllocate_WhenItIsArray(ExampleClass[] expected)
+    public void Safe_ShouldAllocate_WhenItIsArray(ExampleClass[] expected)
     {
         // Arrange
 
@@ -47,7 +47,7 @@ public class StackTests
     }
 
     [Theory, AutoData]
-    public void Unsafe_ShouldAllocate_WhenItIsDerivedClass(DerivedClass expected)
+    public void Safe_ShouldAllocate_WhenItIsDerivedClass(DerivedClass expected)
     {
         // Arrange
 
@@ -65,7 +65,7 @@ public class StackTests
     }
 
     [Theory, AutoData]
-    public void Unsafe_ShouldAllocateAndChange_WhenItIsDerivedClass(DerivedClass expected)
+    public void Safe_ShouldAllocateAndChange_WhenItIsDerivedClass(DerivedClass expected)
     {
         // Arrange
 

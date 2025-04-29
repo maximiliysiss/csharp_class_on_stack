@@ -26,6 +26,22 @@ public class StackTests
     }
 
     [Theory, AutoData]
+    public void Unsafe_ShouldAllocate_WhenItIsSimpleClass_ButAllocateLikeSpan(ExampleClass expected)
+    {
+        // Arrange
+
+        // Act
+        var obj = Stack<ExampleClass>.Unsafe(stackalloc byte[Stack<ExampleClass>.Size]);
+
+        obj.X = expected.X;
+        obj.Y = expected.Y;
+
+        // Assert
+        obj.Should().BeEquivalentTo(expected);
+        obj.ToString().Should().Be(expected.ToString());
+    }
+
+    [Theory, AutoData]
     public unsafe void Unsafe_ShouldAllocate_WhenItIsArray(ExampleClass[] expected)
     {
         // Arrange
@@ -38,6 +54,28 @@ public class StackTests
         {
             byte* elementBuffer = stackalloc byte[Stack<ExampleClass>.Size];
             var element = Stack<ExampleClass>.Unsafe(elementBuffer);
+
+            element.X = expected[i].X;
+            element.Y = expected[i].Y;
+
+            obj[i] = element;
+        }
+
+        // Assert
+        obj.Should().BeEquivalentTo(expected);
+    }
+
+    [Theory, AutoData]
+    public void Unsafe_ShouldAllocate_WhenItIsArray_ButAllocateLikeSpan(ExampleClass[] expected)
+    {
+        // Arrange
+
+        // Act
+        var obj = Stack<ExampleClass>.Unsafe(stackalloc byte[Stack<ExampleClass>.Size * expected.Length + 4], expected.Length);
+
+        for (var i = 0; i < obj.Length; i++)
+        {
+            var element = Stack<ExampleClass>.Unsafe(stackalloc byte[Stack<ExampleClass>.Size]);
 
             element.X = expected[i].X;
             element.Y = expected[i].Y;
