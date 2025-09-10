@@ -1,12 +1,13 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using CsharpClassOnStack.Safe.Override;
 
 namespace CsharpClassOnStack.Safe;
 
 public static class Stack<T> where T : class
 {
-    public static readonly int Size = IntPtr.Size * 2 + Unsafe.SizeOf<T>();
+    public static readonly int Size = Unsafe<T>.SizeOf();
 
     private static readonly IntPtr _typeHandle = typeof(T).TypeHandle.Value;
     private static readonly IntPtr _arrayTypeHandle = typeof(T[]).TypeHandle.Value;
