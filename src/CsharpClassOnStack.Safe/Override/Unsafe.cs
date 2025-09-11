@@ -37,5 +37,6 @@ internal static class Unsafe<T> where T : class
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ref T As(ref Span<IntPtr> source) => ref _delegate(ref source);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int SizeOf() => _size;
 }
